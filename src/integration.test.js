@@ -20,7 +20,9 @@ describe("guessWord action dispatcher", () => {
             guessedWord: unsuccessfulGuess,
             letterMatchCount: 3
           }
-        ]
+        ],
+        giveUp:false,
+        "showUserWord": {"showForm": false, "word": ""}
       };
       const newState = store.getState();
       expect(newState).toEqual(expectedState);
@@ -35,7 +37,9 @@ describe("guessWord action dispatcher", () => {
             guessedWord: secretWord,
             letterMatchCount: 5
           }
-        ]
+        ],
+        giveUp: false,
+        "showUserWord": {"showForm": false, "word": ""}
       };
       const newState = store.getState();
       expect(newState).toEqual(expectedState);
@@ -57,7 +61,10 @@ describe("guessWord action dispatcher", () => {
         guessedWords: [
           ...guessedWords,
           { guessedWord: unsuccessfulGuess, letterMatchCount: 3 }
-        ]
+        ],
+        giveUp: false,
+        "showUserWord": {"showForm": false, "word": ""}
+
       };
       expect(newState).toEqual(expectedState);
     });
@@ -70,7 +77,9 @@ describe("guessWord action dispatcher", () => {
         guessedWords: [
           ...guessedWords,
           { guessedWord: secretWord, letterMatchCount: 5 }
-        ]
+        ],
+        giveUp: false,
+        "showUserWord": {"showForm": false, "word": ""}
       };
       expect(newState).toEqual(expectedState);
     });

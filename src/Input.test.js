@@ -2,10 +2,10 @@ import React from "react";
 import { mount, shallow } from "enzyme";
 import { Provider } from "react-redux";
 
-import { findByTestAttr, configureStore } from "../test/testUtils";
+import { findByTestAttr, configureStore, checkProps  } from "../test/testUtils";
 import Input, { UnconnectedInput } from "./Input";
 
-const setup = (initialState = {}) => {
+const setup = (initialState = { secretWord: ''}) => {
   const store = configureStore(initialState);
   const wrapper = mount(
     <Provider store={store}>
@@ -34,6 +34,10 @@ describe("render", () => {
       const submitButton = findByTestAttr(wrapper, "submit-button");
       expect(submitButton.length).toBe(1);
     });
+    test("renders give up button", () => {
+      const submitButton = findByTestAttr(wrapper, "give-up-button");
+      expect(submitButton.length).toBe(1);
+    });
   });
   describe("word has been guessed", () => {
     let wrapper;
@@ -51,6 +55,10 @@ describe("render", () => {
     });
     test("does not render submit button", () => {
       const submitButton = findByTestAttr(wrapper, "submit-button");
+      expect(submitButton.length).toBe(0);
+    });
+    test("does not render give up button", () => {
+      const submitButton = findByTestAttr(wrapper, "give-up-button");
       expect(submitButton.length).toBe(0);
     });
   });
@@ -72,13 +80,19 @@ describe("redux props", () => {
 
 describe("`guessWord`action creator call", () => {
   let guessWordMock;
+  let giveUP;
   let wrapper;
   const guessedWord = 'train';
   beforeEach(() => {
     guessWordMock = jest.fn();
+    giveUP = jest.fn();
 
     const props = {
-      guessWord: guessWordMock
+      success: false,
+      secretWord: '',
+      guessWord: guessWordMock,
+      giveUP,
+      display: true
     };
 
     wrapper = shallow(<UnconnectedInput {...props} />);
@@ -96,8 +110,27 @@ describe("`guessWord`action creator call", () => {
     const guessWordArg = guessWordMock.mock.calls[0][0];
     expect(guessWordArg).toBe(guessedWord);
   });
-  test('input vox clears on submit', ()=>{
+  test('input box clears on submit', ()=>{
     expect(wrapper.instance().inputBox
     .current.value).toBe('');
   })
+  test('give UP buttons calls', ()=>{
+    const giveUpButton = findByTestAttr(wrapper, "give-up-button");
+    giveUpButton.simulate("click",{preventDefault: ()=>{}});
+    expect(giveUP).toBeCalled();
+  })
 });
+
+test('display is true', ()=>{
+  const wrapper = shallow(<UnconnectedInput display={true} success={false} />)
+  const componentInput = findByTestAttr(wrapper, 'component-input');
+  expect(componentInput.length).toBe(1);
+  
+});
+
+test('display is false', ()=>{
+  const wrapper = shallow(<UnconnectedInput display={false} success={false} />)
+  const box = findByTestAttr(wrapper, 'box');
+  expect(box.length).toBe(1);
+  
+})

@@ -34,6 +34,10 @@ describe("if there are no word guessed", () => {
     const instructions = findByTestAttr(wrapper, "guess-instruction");
     expect(instructions.text().length).not.toBe(0);
   });
+  test('total doesnt appears', ()=>{
+    const total = findByTestAttr(wrapper, "total");
+    expect(total.length).toBe(0);
+  })
 });
 
 describe("if there are words guessed", () => {
@@ -58,4 +62,8 @@ describe("if there are words guessed", () => {
       const guessedWordsNode = findByTestAttr(wrapper, 'guessed-word');
       expect(guessedWordsNode.length).toBe(guessedWords.length);
   });
+  test('total  appears', ()=>{
+    const total = findByTestAttr(wrapper, "total");  
+    expect(total.length).toBe(1);
+  })
 });

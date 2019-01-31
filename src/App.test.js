@@ -29,13 +29,16 @@ describe("redux properties", () => {
   });
 });
 
+
+
 test("`getSecretWord`runs on App mount", () => {
   const getSecretWordMock = jest.fn();
 
   const props = {
     getSecretWord: getSecretWordMock,
     success: false,
-    guessedWords: []
+    guessedWords: [],
+    giveUp: false,
   };
 
   const wrapper = shallow(
@@ -49,4 +52,46 @@ test("`getSecretWord`runs on App mount", () => {
   const getSecretWordCallCount = getSecretWordMock.mock.calls.length;
 
   expect(getSecretWordCallCount).toBe(1);
+});
+
+test('Reset button when success is false', ()=>{
+
+  const props = {
+    success: true,
+    guessedWords: [],
+    giveUp: false
+  };
+
+  const wrapper = setup(props);
+
+  wrapper.instance().componentDidMount();
+
+  const resetButton = wrapper.find('Reset').children();
+
+  
+
+
+  expect(resetButton.text()).toContain("New Word");
+});
+
+test('when reset button success should be false', ()=>{
+  const props = {
+    success: true,
+    guessedWords: []    ,
+    giveUp: false,
+  };
+
+  const wrapper = setup(props);
+
+  wrapper.instance().componentDidMount();
+
+
+  const resetButton = wrapper.find('Reset').children();
+
+  resetButton.simulate('click');
+
+  const successProps = wrapper.instance().props.success;
+
+  expect(successProps).toBe(false);
+
 });

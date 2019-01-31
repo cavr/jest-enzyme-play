@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import Total from './Total';
+
 const GuessWords = props => {
   const { guessedWords } = props;
   let contents;
@@ -8,7 +10,7 @@ const GuessWords = props => {
     contents = (
       <span data-test="guess-instruction">Try to guess the secret word!</span>
     );
-  } else {
+  } else {  
     const guessedWordsRows = props.guessedWords.map((word, index) => (
         <tr data-test="guessed-word" key={index}>
             <td>{index}</td>
@@ -30,9 +32,7 @@ const GuessWords = props => {
           </thead>
           <tbody>{guessedWordsRows}</tbody>
         </table>
-        <div>
-          <strong>Total Guessess {props.guessedWords.length}</strong>
-        </div>
+        <Total data-test="total" total={props.guessedWords.length} />
       </div>
     );
   }
